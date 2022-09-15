@@ -34,7 +34,11 @@
 .content {
   position: relative;
   top: -65%;
-  height: 60%;
+  height: 220px;
+  width: 35%;
+  background-color: #16202d;
+  border-radius: 25px;
+  padding-bottom: 55px;
 }
 
 .home img {
@@ -118,6 +122,9 @@
 
 /* IPad Pro */
 @media (max-width: 1024px) {
+  .content {
+      height: 310px;
+    }
 }
 
 /*  Large devices (desktops, 992px and up) */
@@ -136,7 +143,7 @@
   .content {
     position: relative;
     top: -75%;
-    height: 65%;
+    height: 220px;
   }
 
   .home img {
