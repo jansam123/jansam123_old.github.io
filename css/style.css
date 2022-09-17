@@ -39,7 +39,7 @@
 }
 
 
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 576px) {
     .home img {
             width: 140px;
             max-width: 50%;
