@@ -27,15 +27,43 @@
             rgba(34, 136, 168, 0.1) 0%);
 }
 
+.navbar-icon-svg-dark {
+    filter: invert(0) !important;
+}
+
 
 .home img{
     width: 200px;
     height: 200px;
+    background-color: #1c2d41;
 }
 
-.content {
-    top: -83%;
 
+
+@media screen {
+        .home img {
+            background-color: #1c2d41;
+        }
+    }
+
+
+.content {
+    top: -70%;
+
+}
+
+.container-small{
+    background-color: #f9fafc;
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 40px;
+}
+
+.home .greeting{
+    color: #1c2d41;
 }
 
 
