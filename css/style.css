@@ -32,11 +32,18 @@
     width: 200px;
     height: 200px;
 }
- 
+
 .content {
     top: -83%;
 
 }
 
 
+@media only screen and (max-width: 375px) {
+    .home img {
+            width: 150px;
+            max-width: 50%;
+            height: auto;
+        }
+}
 
