@@ -38,13 +38,19 @@
     background-color: #1c2d41;
 }
 
+.navbar-dark .navbar-toggler-icon{
+    filter: invert(1) ;
+}
+/* .navbar-toggler-icon {
+    filter: invert(1) ;
+} */
 
 
 @media screen {
-        .home img {
-            background-color: #1c2d41;
-        }
+    .home img {
+        background-color: #1c2d41;
     }
+}
 
 
 .content {
@@ -69,8 +75,8 @@
 
 @media only screen and (max-width: 576px) {
     .home img {
-            width: 140px;
-            max-width: 50%;
+            width: 150px;
+            max-width: 70%;
             height: auto;
         }
 }
