@@ -2,40 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://jansam.matfyz.cz/sk/categories/</loc>
+    <loc>https://jansam123.github.io/sk/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://jansam.matfyz.cz/categories/"
+                href="https://jansam123.github.io/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="sk"
-                href="https://jansam.matfyz.cz/sk/categories/"
+                href="https://jansam123.github.io/sk/categories/"
                 />
   </url><url>
-    <loc>https://jansam.matfyz.cz/sk/</loc>
+    <loc>https://jansam123.github.io/sk/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://jansam.matfyz.cz/"
+                href="https://jansam123.github.io/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="sk"
-                href="https://jansam.matfyz.cz/sk/"
+                href="https://jansam123.github.io/sk/"
                 />
   </url><url>
-    <loc>https://jansam.matfyz.cz/sk/tags/</loc>
+    <loc>https://jansam123.github.io/sk/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://jansam.matfyz.cz/tags/"
+                href="https://jansam123.github.io/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="sk"
-                href="https://jansam.matfyz.cz/sk/tags/"
+                href="https://jansam123.github.io/sk/tags/"
                 />
   </url>
 </urlset>

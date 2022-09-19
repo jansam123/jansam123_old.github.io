@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Samuel Jankovych</title>
-    <link>https://jansam.matfyz.cz/sk/</link>
+    <link>https://jansam123.github.io/sk/</link>
     <description>Recent content on Samuel Jankovych</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://jansam.matfyz.cz/sk/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://jansam123.github.io/sk/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
