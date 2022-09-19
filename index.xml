@@ -2,11 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Samuel Jankovych</title>
-    <link>https://jansam123.github.io/</link>
+    <link>https://jansam.matfyz.cz/</link>
     <description>Recent content on Samuel Jankovych</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Jun 2010 08:06:25 +0600</lastBuildDate><atom:link href="https://jansam123.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Sep 2022 08:06:25 +0600</lastBuildDate><atom:link href="https://jansam.matfyz.cz/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Setup MFF UK GPULab</title>
+      <link>https://jansam.matfyz.cz/posts/gpulab/</link>
+      <pubDate>Sun, 18 Sep 2022 08:06:25 +0600</pubDate>
+      
+      <guid>https://jansam.matfyz.cz/posts/gpulab/</guid>
+      <description>Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Write to admin (jakub.yaghob@mff.cuni.cz) to get access to docker. Docker to Charliecloud Access docker with salloc -C docker Pull CUDA from docker hub sudo docker pull nvidia/cuda:11.7.1-devel-ubuntu22.04 Now we need to convert the docker image to charliecloud image. You can try to run the following code: ch-convert -i docker nvidia/cuda:11.7.1-devel-ubuntu22.04 cuda If you get an error (in my case it was due to my id being out of range), you need to start a docker container from the image, sudo docker run --rm -d -it --name cuda nvidia/cuda:11.</description>
+    </item>
+    
+    <item>
+      <title>TBrowser in docker container</title>
+      <link>https://jansam.matfyz.cz/posts/tbrowser/</link>
+      <pubDate>Sun, 18 Sep 2022 08:06:25 +0600</pubDate>
+      
+      <guid>https://jansam.matfyz.cz/posts/tbrowser/</guid>
+      <description>Set up Install Docker Pull the ROOT (rootproject/root:6.26.06-ubuntu22.04) docker image: docker pull rootproject/root:6.26.06-ubuntu22.04 Run the docker image: docker run -p 9200:9200 --rm -d -it -v ~/host/dir:/container/dir --name TBrowser rootproject/root:6.26.06-ubuntu22.04 root -l --web=server:9200 /opt/root/tutorials/v7/browser.cxx -p 9200:9200 maps the port 9200 of the host to the port 9200 of the container --rm removes the container after it exits -d runs the container in the background -it runs the container in interactive mode -v ~/host/dir:/container/dir mounts the host directory ~/host/dir to the container directory /container/dir --name TBrowser names the container TBrowser rootproject/root:latest is the docker image root -l --web=server:9200 /opt/root/tutorials/v7/browser.</description>
+    </item>
+    
+    
     
     
     
@@ -33,10 +51,10 @@
     
     <item>
       <title>Jet Identification Deep Neural Network</title>
-      <link>https://jansam123.github.io/posts/jidenn/</link>
+      <link>https://jansam.matfyz.cz/posts/jidenn/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://jansam123.github.io/posts/jidenn/</guid>
+      <guid>https://jansam.matfyz.cz/posts/jidenn/</guid>
       <description>Introduction This is a deep neural network for jet identification.
 Data Architecture </description>
     </item>

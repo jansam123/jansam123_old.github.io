@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Setup MFF UK GPULab</title>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/css/layouts/main.css"/>
+<link rel="stylesheet" href="/css/navigators/navbar.css"/>
+<link rel="stylesheet" href="/css/plyr.css"/>
+<link rel="stylesheet" href="/css/flag-icon.min.css"/>
+
+
+<link rel="stylesheet" href="/google-fonts/Mulish/mulish.css"/>
+
+
+<link rel="stylesheet" href="/fontawesome/css/all.min.css"/>
+
+
+
+<link rel="stylesheet" href="/css/colortheme/colortheme.css"/>
+
+
+
+
+
+<meta property="og:title" content="Setup MFF UK GPULab" />
+<meta property="og:description" content="Setup a tensorflow with CUDA and cuDNN on MFF UK GPULab." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jansam.matfyz.cz/posts/gpulab/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-18T08:06:25+06:00" />
+<meta property="article:modified_time" content="2022-09-18T08:06:25+06:00" />
+
+
+
+    
+    
+<meta name="description" content="Setup a tensorflow with CUDA and cuDNN on MFF UK GPULab." />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css"
+/>
+<link rel="stylesheet" href="/css/layouts/single.css"/>
+<link rel="stylesheet" href="/css/navigators/sidebar.css">
+
+<link rel="stylesheet" href="/css/style.css"/>
+
+
+
+    
+
+
+
+
+</head>
+
+  <body data-spy="scroll" data-target="#TableOfContents" data-offset="80">
+    <div class="container-fluid bg-dimmed wrapper">
+      
+      
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-xl top-navbar final-navbar shadow">
+  <div class="container">
+      <button class="navbar-toggler navbar-light" id="sidebar-toggler" type="button" onclick="toggleSidebar()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">
+      Samuel Jankovych</a>
+    <button class="navbar-toggler navbar-light" id="toc-toggler" type="button" onclick="toggleTOC()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse lang-selector" id="top-nav-items">
+      <ul class="navbar-nav ml-auto">
+      
+      
+        <li class="nav-item dropdown">
+
+<div id="theme-initialization" style="display: none;"
+  default-theme="system"></div>
+<a class="nav-link dropdown-toggle"  href="#" id="themeSelector" role="button"
+  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <img id="navbar-theme-icon-svg" src="/icons/moon-svgrepo-com.svg" width=20>
+</a>
+<div class="dropdown-menu dropdown-menu-icons-only" aria-labelledby="themeSelector">
+  <a class="dropdown-item nav-link" href="#" onclick="enableLightTheme()">
+    <img class="menu-icon-center" src="/icons/sun-svgrepo-com.svg" width=20>
+  </a>
+  <a class="dropdown-item nav-link" href="#" onclick="enableDarkTheme()">
+    <img class="menu-icon-center" src="/icons/moon-svgrepo-com.svg" width=20>
+  </a>
+  <a class="dropdown-item nav-link" href="#" onclick="useSystemTheme()">
+    <img class="menu-icon-center" src="/icons/computer-svgrepo-com.svg" width=20>
+  </a>
+</div>
+</li>
+      
+      </ul>
+    </div>
+  </div>
+  
+  
+  
+</nav>
+
+
+
+      
+      
+  <section class="sidebar-section" id="sidebar-section">
+    <div class="sidebar-holder">
+      <div class="sidebar" id="sidebar">
+        <form class="mx-auto" method="get" action="/search">
+          <input type="text" name="keyword" value="" placeholder="Search" data-search="" id="search-box" />
+        </form>
+        <div class="sidebar-tree">
+          <ul class="tree" id="tree">
+            <li id="list-heading"><a href="/posts" data-filter="all">Posts</a></li>
+            <div class="subtree">
+                
+  
+  
+  
+  
+  
+    
+    <li><a class="" href="/posts/tbrowser/" title="TBrowser in Docker">TBrowser in Docker</a></li>
+  
+
+  
+  
+  
+  
+    
+    
+  
+  
+    
+    <li><a class="active" href="/posts/gpulab/" title="MFF UK GPULab">MFF UK GPULab</a></li>
+  
+
+  
+  
+  
+  
+  
+    
+    <li><a class="" href="/posts/jidenn/" title="JIDENN">JIDENN</a></li>
+  
+
+
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+      
+      
+<section class="content-section" id="content-section">
+  <div class="content">
+    <div class="container p-0 read-area">
+      
+      <div class="hero-area col-sm-12" id="hero-area" style='background-image: url(/posts/gpulab/nvidia_smi.jpg);'>
+      </div>
+
+      
+      <div class="page-content">
+        <div class="author-profile ml-auto align-self-lg-center">
+          <img class="rounded-circle" src='/images/avatar3_hu0f66addc0d48dc667258b1013c188544_472979_120x120_fit_q75_box.jpeg' alt="Author Image">
+          <h5 class="author-name">Samuel Jankovych</h5>
+          <p>Sunday, September 18, 2022</p>
+        </div>
+
+        <div class="title">
+          <h1>Setup MFF UK GPULab</h1>
+        </div>
+        
+        <div class="post-content" id="post-content">
+          <h2 id="prerequisites">Prerequisites</h2>
+<ol start="0">
+<li>Get a CAS login.</li>
+<li>Login to gpulab using CAS login, follow this <a href="https://gitlab.mff.cuni.cz/mff/hpc/clusters#installed-software-on-clusters">guide</a>.</li>
+<li>Write to admin (<a href="mailto:jakub.yaghob@mff.cuni.cz">jakub.yaghob@mff.cuni.cz</a>) to get access to docker.</li>
+</ol>
+<h2 id="docker-to-charliecloud">Docker to Charliecloud</h2>
+<ol start="3">
+<li>Access docker with
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>salloc -C docker
+</span></span></code></pre></div></li>
+<li>Pull CUDA from docker hub
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker pull nvidia/cuda:11.7.1-devel-ubuntu22.04
+</span></span></code></pre></div></li>
+<li>Now we need to convert the docker image to charliecloud image.
+You can try to run the following code:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert -i docker nvidia/cuda:11.7.1-devel-ubuntu22.04 cuda
+</span></span></code></pre></div>If you get an error (in my case it was due to my id being out of range), you need to start a docker container from the image,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker run --rm -d -it --name cuda nvidia/cuda:11.7.1-devel-ubuntu22.04 bash
+</span></span></code></pre></div>then save the container as a tar file.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker export cuda &gt; cuda.tar.gz
+</span></span></code></pre></div>Then you can convert the tar file to a charliecloud image.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert cuda.tar.gz cuda
+</span></span></code></pre></div>Stop the container.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker stop cuda
+</span></span></code></pre></div>You can verify deletion of the container with
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker ps -a
+</span></span></code></pre></div></li>
+<li>Convert the image to folder strucutre.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert cuda ./cuda
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="cuda">CUDA</h2>
+<ol start="7">
+<li>To upload CUDA libraries, first exit the <code>dw[01-05]</code> node
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>username@dw<span style="color:#f92672">[</span>01-05<span style="color:#f92672">]</span>:~$ exit
+</span></span></code></pre></div>then upload the CUDA libs from node with GPU
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-fromhost --nvidia ./cuda
+</span></span></code></pre></div>You can verify the upload with
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run cuda nvidia-smi
+</span></span></code></pre></div>You should see something like this:
+<img src="nvidia_smi.jpg" alt="nvidia-smi"></li>
+</ol>
+<h2 id="cudnnhttpsdocsnvidiacomdeeplearningcudnninstall-guideindexhtml"><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">cuDNN</a></h2>
+<ol start="8">
+<li>To use the cuDNN library, you need to register on the <a href="https://developer.nvidia.com/developer-program">NVIDIA Developer Program</a>. Then you can download the cuDNN library from <a href="https://developer.nvidia.com/rdp/cudnn-download">here</a>. Find the version of cuDNN that matches your CUDA version and container OS. If you are using the same container tag, as shown above download <code>Local Installer for Ubuntu22.04 x86_64 (Deb)</code> for <code>CUDA 11.X</code>. Afterwards upload the file to GPULab using <code>scp</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>scp cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb username@gpulab:~/
+</span></span></code></pre></div></li>
+<li>Extract the cuDNN library in the Charliecloud image
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- dpkg -i cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb
+</span></span></code></pre></div></li>
+<li>Install the cuDNN library:
+<ol>
+<li>import key
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- cp /var/cudnn-local-repo-ubuntu2204-8.5.0.96/cudnn-local-7ED72349-keyring.gpg /usr/share/keyrings/
+</span></span></code></pre></div></li>
+<li>refresh repo metadata
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get update
+</span></span></code></pre></div></li>
+<li>install cuDNN
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get install libcudnn8<span style="color:#f92672">=</span>8.5.0.96-1+cuda11.7
+</span></span></code></pre></div>You might need to press enter to confirm the installation, even if not prompted yet.</li>
+</ol>
+</li>
+</ol>
+<p>If needed, you can follow the official <a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">guide</a> for more details, but remeber to the <code>srun -p gpu-ffa --gpus=1 ch-run -w -u 0 -g 0 -c /home/username ./cuda --</code> prefix and run without sudo.
+The prefix explains the following:</p>
+<ul>
+<li><code>srun -p gpu-ffa --gpus=1</code> - run on node with GPU</li>
+<li><code>ch-run -w -u 0 -g 0 -c /home/username ./cuda</code> - run as root user (<code>-u 0 -g 0</code>) in the container in <code>./cuda</code> with working directory <code>/home/username</code> and write access to the container (<code>-w</code>).</li>
+<li>after <code>--</code>  the command to run in the container.</li>
+</ul>
+<h2 id="python">Python</h2>
+<ol start="11">
+<li>Install python3.10
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get install python3
+</span></span></code></pre></div>Again you might need to press enter to confirm the installation, even if not prompted yet.</li>
+<li>Install pip
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get install python3-pip
+</span></span></code></pre></div>Again you might need to press enter to confirm the installation, even if not prompted yet.</li>
+<li>Verify the installation
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- python3 --version
+</span></span></code></pre></div>You should see something like this:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Python 3.10.4
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="tensorflow">Tensorflow</h2>
+<ol start="14">
+<li>Install tensorflow
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- pip3 install tensorflow
+</span></span></code></pre></div></li>
+<li>Verify the installation
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- python3 -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))&#34;</span>
+</span></span></code></pre></div>You should see something like this:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tf.Tensor<span style="color:#f92672">(</span>0.0, shape<span style="color:#f92672">=()</span>, dtype<span style="color:#f92672">=</span>float32<span style="color:#f92672">)</span>
+</span></span></code></pre></div></li>
+<li>Verify GPU support
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- python3 -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39;))&#34;</span>
+</span></span></code></pre></div>You should see something like this:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>PhysicalDevice<span style="color:#f92672">(</span>name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/physical_device:GPU:0&#39;</span>, device_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;GPU&#39;</span><span style="color:#f92672">)]</span>
+</span></span></code></pre></div></li>
+</ol>
+
+        </div>
+
+        
+        <div class="row pl-3 pr-3">
+        
+        <div class="col-md-6 share-buttons">
+        
+          </div>
+
+        
+        
+          
+            
+          
+          <div class="col-md-6 btn-improve-page">
+             
+               <a href="https://github.com/jansam123/Portfolio/edit/master/content/posts/gpulab/index.md" title="Improve this page" target="_blank" rel="noopener">
+            
+                <i class="fas fa-code-branch"></i>
+                Improve this page
+              </a>
+          </div>
+        
+        </div>
+
+
+
+      
+      <hr />
+        
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+  
+
+  
+    
+    
+  
+  
+
+  
+  
+
+
+<div class="row next-prev-navigator">
+  
+    <div class="col-md-6 previous-article">
+      <a href="/posts/tbrowser/" title="TBrowser in docker container" class="btn btn-outline-info">
+        <div><i class="fas fa-chevron-circle-left"></i> Prev</div>
+        <div class="next-prev-text">TBrowser in docker container</div>
+      </a>
+    </div>
+  
+  
+      
+      
+        
+      
+      <div class="col-md-6 next-article">
+        <a href="/posts/jidenn/" title="Jet Identification Deep Neural Network" class="btn btn-outline-info">
+          <div>Next <i class="fas fa-chevron-circle-right"></i></div>
+          <div class="next-prev-text">Jet Identification Deep Neural Network</div>
+        </a>
+      </div>
+    
+</div>
+
+      <hr />
+
+      
+      
+
+      
+      
+
+      </div>
+    </div>
+  </div>
+  
+  <a id="scroll-to-top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
+  
+</section>
+
+
+      
+      
+  <section class="toc-section" id="toc-section">
+    
+    <div class="toc-holder">
+      <h5 class="text-center pl-3">Table of Contents</h5>
+      <hr>
+      <div class="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#docker-to-charliecloud">Docker to Charliecloud</a></li>
+    <li><a href="#cuda">CUDA</a></li>
+    <li><a href="#cudnnhttpsdocsnvidiacomdeeplearningcudnninstall-guideindexhtml"><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">cuDNN</a></a></li>
+    <li><a href="#python">Python</a></li>
+    <li><a href="#tensorflow">Tensorflow</a></li>
+  </ul>
+</nav>
+      </div>
+    </div>
+    
+  </section>
+
+    </div>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+  
+      
+  
+
+
+
+  
+  
+    
+  
+
+  
+  
+    
+  
+
+  
+  
+
+  
+  
+    
+    
+      
+    
+  
+
+
+  
+  
+  
+
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+
+  
+  
+  
+
+  <footer id="footer" class="container-fluid text-center align-content-center footer pb-2">
+    <div class="container pt-5">
+      <div class="row text-left">
+        
+        <div class="col-md-4 col-sm-12">
+          <h5>Navigation</h5>
+          
+          <ul>
+              
+                
+                
+                  
+                
+                <li class="nav-item">
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#about">About</a>
+                </li>
+              
+              
+                
+                
+                  
+                
+                <li class="nav-item">
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#skills">Skills</a>
+                </li>
+              
+              
+                
+                
+                  
+                
+                <li class="nav-item">
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#experiences">Experiences</a>
+                </li>
+              
+              
+                
+                
+                  
+                
+                <li class="nav-item">
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#education">Education</a>
+                </li>
+              
+              
+                
+                
+                  
+                
+                <li class="nav-item">
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#projects">Projects</a>
+                </li>
+              
+            
+              
+            
+          </ul>
+          
+        </div>
+        
+        
+        <div class="col-md-4 col-sm-12">
+          <h5>Contact me:</h5>
+          <ul>
+            
+              
+                <li><a href=mailto:samueljankovych@gmail.com target="_blank" rel="noopener">
+                  <span><i class="fas fa-envelope"></i></span> <span>samueljankovych@gmail.com</span>
+                </a></li>
+              
+            
+              
+                <li>
+                  
+                  <a href=https://github.com/jansam123 target="_blank" rel="noopener">
+                    <span><i class=fab&#32;fa-github></i></span> <span>jansam123</span>
+                  </a>
+                  
+                </li>
+              
+            
+              
+                <li><span><i class="fas fa-phone-alt"></i></span> <span>&#43;421950442667</span></li>
+              
+            
+          </ul>
+        </div>
+        
+        
+        
+      </div>
+    </div>
+    
+    
+    <hr />
+    <div class="container">
+      <div class="row text-left">
+        <div class="col-md-4">
+          <a id="theme" href="https://github.com/hossainemruz/toha" target="_blank" rel="noopener">
+            <img src="/images/theme-logo_hu8376fd15465fef26ffe66b6bcf0ca686_13669_32x0_resize_box_3.png" alt="Toha Theme Logo">
+            Toha
+          </a>
+        </div>
+        <div class="col-md-4 text-center">© 2020 Copyright.</div>
+        <div class="col-md-4 text-right">
+          <a id="hugo" href="https://gohugo.io/" target="_blank" rel="noopener">Powered by
+          <img
+            src="/images/hugo-logo.svg"
+            alt="Hugo Logo"
+            height="18"
+          />
+          </a>
+        </div>
+      </div>
+    </div>
+    
+  </footer>
+
+
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/js/popper.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/js/navbar.js"></script>
+<script type="text/javascript" src="/js/plyr.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+<script type="text/javascript" src="/js/darkreader.js"></script>
+<script type="text/javascript" src="/js/darkmode-darkreader.js"></script>
+
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+<script src="/js/single.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+
+
+
+
+
+    
+</body>
+</html>

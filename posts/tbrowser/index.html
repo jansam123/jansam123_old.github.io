@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Notes</title>
+    <title>TBrowser in docker container</title>
     <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -27,21 +27,27 @@
 
 
 
-<meta property="og:title" content="Notes" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://jansam.matfyz.cz/notes/" />
+<meta property="og:title" content="TBrowser in docker container" />
+<meta property="og:description" content="Setup a TBrowser to run in any docker container and host it on a web browser." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jansam.matfyz.cz/posts/tbrowser/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-18T08:06:25+06:00" />
+<meta property="article:modified_time" content="2022-09-18T08:06:25+06:00" />
 
 
 
     
     
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css"
-  />
-  <link rel="stylesheet" href="/css/layouts/notes.css">
-  <link rel="stylesheet" href="/css/navigators/sidebar.css">
+<meta name="description" content="Setup a TBrowser to run in any docker container and host it on a web browser." />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css"
+/>
+<link rel="stylesheet" href="/css/layouts/single.css"/>
+<link rel="stylesheet" href="/css/navigators/sidebar.css">
+
+<link rel="stylesheet" href="/css/style.css"/>
+
 
 
     
@@ -116,11 +122,6 @@
 
       
       
-  
-  
-    
-  
-
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder">
       <div class="sidebar" id="sidebar">
@@ -129,9 +130,39 @@
         </form>
         <div class="sidebar-tree">
           <ul class="tree" id="tree">
-            <li id="list-heading"><a href="/notes" data-filter="all">Notes</a></li>
+            <li id="list-heading"><a href="/posts" data-filter="all">Posts</a></li>
             <div class="subtree">
                 
+  
+  
+  
+  
+    
+    
+  
+  
+    
+    <li><a class="active" href="/posts/tbrowser/" title="TBrowser in Docker">TBrowser in Docker</a></li>
+  
+
+  
+  
+  
+  
+  
+    
+    <li><a class="" href="/posts/gpulab/" title="MFF UK GPULab">MFF UK GPULab</a></li>
+  
+
+  
+  
+  
+  
+  
+    
+    <li><a class="" href="/posts/jidenn/" title="JIDENN">JIDENN</a></li>
+  
+
 
             </div>
           </ul>
@@ -144,80 +175,159 @@
       
       
 <section class="content-section" id="content-section">
-  <div class="content container-fluid" id="content">
-    <div class="container-fluid note-card-holder" id="note-card-holder">
+  <div class="content">
+    <div class="container p-0 read-area">
+      
+      <div class="hero-area col-sm-12" id="hero-area" style='background-image: url(/posts/tbrowser/TBrowser_screenshot.jpg);'>
+      </div>
+
+      
+      <div class="page-content">
+        <div class="author-profile ml-auto align-self-lg-center">
+          <img class="rounded-circle" src='/images/avatar3_hu0f66addc0d48dc667258b1013c188544_472979_120x120_fit_q75_box.jpeg' alt="Author Image">
+          <h5 class="author-name">Samuel Jankovych</h5>
+          <p>Sunday, September 18, 2022</p>
+        </div>
+
+        <div class="title">
+          <h1>TBrowser in docker container</h1>
+        </div>
+        
+        <div class="post-content" id="post-content">
+          <h2 id="set-up">Set up</h2>
+<ol start="0">
+<li>Install <a href="https://docs.docker.com/get-docker/">Docker</a></li>
+<li>Pull the <a href="https://hub.docker.com/r/rootproject/root">ROOT</a> (rootproject/root:6.26.06-ubuntu22.04) docker image:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker pull rootproject/root:6.26.06-ubuntu22.04
+</span></span></code></pre></div></li>
+<li>Run the docker image:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker run -p 9200:9200 --rm -d -it -v ~/host/dir:/container/dir --name TBrowser rootproject/root:6.26.06-ubuntu22.04 root -l --web<span style="color:#f92672">=</span>server:9200 /opt/root/tutorials/v7/browser.cxx
+</span></span></code></pre></div><ul>
+<li><code>-p 9200:9200</code> maps the port 9200 of the host to the port 9200 of the container</li>
+<li><code>--rm</code> removes the container after it exits</li>
+<li><code>-d</code> runs the container in the background</li>
+<li><code>-it</code> runs the container in interactive mode</li>
+<li><code>-v ~/host/dir:/container/dir</code> mounts the host directory <code>~/host/dir</code> to the container directory <code>/container/dir</code></li>
+<li><code>--name TBrowser</code> names the container <code>TBrowser</code></li>
+<li><code>rootproject/root:latest</code> is the docker image</li>
+<li><code>root -l --web=server:9200 /opt/root/tutorials/v7/browser.cxx</code> runs the ROOT TBrowser in the container</li>
+<li></li>
+</ul>
+</li>
+<li>Open a web browser and go to <a href="https://localhost:9200/win1"><code>localhost:9200/win1</code></a> to see the TBrowser:</li>
+</ol>
+<p><img src="TBrowser_screenshot.jpg" alt="TBrowser screenshot"></p>
+<ol start="4">
+<li>To stop the container, run:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker stop TBrowser
+</span></span></code></pre></div></li>
+</ol>
+
+        </div>
+
+        
+        <div class="row pl-3 pr-3">
+        
+        <div class="col-md-6 share-buttons">
+        
+          </div>
+
+        
+        
+          
+            
+          
+          <div class="col-md-6 btn-improve-page">
+             
+               <a href="https://github.com/jansam123/Portfolio/edit/master/content/posts/TBrowser/index.md" title="Improve this page" target="_blank" rel="noopener">
+            
+                <i class="fas fa-code-branch"></i>
+                Improve this page
+              </a>
+          </div>
+        
+        </div>
+
+
+
+      
+      <hr />
+        
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+    
+  
+  
+
+  
+  
+
+  
+  
+
+
+<div class="row next-prev-navigator">
+  
+  
       
       
-        
-        
-        
+      <div class="col-md-12 next-article">
+        <a href="/posts/gpulab/" title="Setup MFF UK GPULab" class="btn btn-outline-info">
+          <div>Next <i class="fas fa-chevron-circle-right"></i></div>
+          <div class="next-prev-text">Setup MFF UK GPULab</div>
+        </a>
+      </div>
+    
+</div>
+
+      <hr />
+
       
-        
-        
-        
       
-        
-        
-        
+
       
-        
-        
-        
       
-        
-        
-        
-      
-        
-        
-        
-      
-        
-        
-        
-      
-        
-        
-        
-      
-        
-        
-        
-      
-        
-        
-        
-      
-    </div>
-    <div class="paginator">
-      
-    <ul class="pagination pagination-default">
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="First" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;&laquo;</span></a>
-      </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Previous" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;</span></a>
-      </li>
-      <li class="page-item active">
-        <a aria-current="page" aria-label="Page 1" class="page-link" role="button">1</a>
-      </li>
-      <li class="page-item">
-        <a href="/notes/page/2/" aria-label="Page 2" class="page-link" role="button">2</a>
-      </li>
-      <li class="page-item">
-        <a href="/notes/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
-      </li>
-      <li class="page-item">
-        <a href="/notes/page/2/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
-      </li>
-    </ul>
+
+      </div>
     </div>
   </div>
+  
+  <a id="scroll-to-top" class="btn"><i class="fas fa-chevron-circle-up"></i></a>
+  
 </section>
 
 
       
-       
+      
+  <section class="toc-section" id="toc-section">
+    
+    <div class="toc-holder">
+      <h5 class="text-center pl-3">Table of Contents</h5>
+      <hr>
+      <div class="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#set-up">Set up</a></li>
+  </ul>
+</nav>
+      </div>
+    </div>
+    
+  </section>
+
     </div>
 
     
@@ -415,13 +525,18 @@
 
     
     
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
-  <script src="/js/imagesloaded.pkgd.min.js"></script>
-  <script src="/js/note.js"></script>
-  <script>
-    hljs.initHighlightingOnLoad();
-  </script>
-  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+<script src="/js/single.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+
+
+
 
 
     

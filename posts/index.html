@@ -30,7 +30,7 @@
 <meta property="og:title" content="Posts" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://jansam123.github.io/posts/" />
+<meta property="og:url" content="https://jansam.matfyz.cz/posts/" />
 
 
 
@@ -137,6 +137,24 @@
   
   
     
+    <li><a class="" href="/posts/tbrowser/" title="TBrowser in Docker">TBrowser in Docker</a></li>
+  
+
+  
+  
+  
+  
+  
+    
+    <li><a class="" href="/posts/gpulab/" title="MFF UK GPULab">MFF UK GPULab</a></li>
+  
+
+  
+  
+  
+  
+  
+    
     <li><a class="" href="/posts/jidenn/" title="JIDENN">JIDENN</a></li>
   
 
@@ -156,6 +174,56 @@
     <div class="container-fluid post-card-holder" id="post-card-holder">
       
       
+      
+        
+          <div class="post-card">
+  <a href="/posts/gpulab/" class="post-card-link">
+    <div class="card">
+      <div class="card-head">
+        <img class="card-img-top" src='/posts/gpulab/nvidia_smi.jpg' alt="Hero Image">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Setup MFF UK GPULab</h5>
+        <p class="card-text post-summary">Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Write to admin (jakub.yaghob@mff.cuni.cz) to get access to docker. Docker to Charliecloud Access docker with salloc -C docker Pull CUDA from docker hub sudo docker pull nvidia/cuda:11.7.1-devel-ubuntu22.04 Now we need to convert the docker image to charliecloud image. You can try to run the following code: ch-convert -i docker nvidia/cuda:11.7.1-devel-ubuntu22.04 cuda If you get an error (in my case it was due to my id being out of range), you need to start a docker container from the image, sudo docker run --rm -d -it --name cuda nvidia/cuda:11.</p>
+      </div>
+      <div class="card-footer">
+        <span class="float-left">September 18, 2022</span>
+        <a
+        href="/posts/gpulab/"
+        class="float-right btn btn-outline-info btn-sm"
+        >Read</a
+        >
+      </div>
+    </div>
+  </a>
+</div>
+
+        
+      
+        
+          <div class="post-card">
+  <a href="/posts/tbrowser/" class="post-card-link">
+    <div class="card">
+      <div class="card-head">
+        <img class="card-img-top" src='/posts/tbrowser/TBrowser_screenshot.jpg' alt="Hero Image">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">TBrowser in docker container</h5>
+        <p class="card-text post-summary">Set up Install Docker Pull the ROOT (rootproject/root:6.26.06-ubuntu22.04) docker image: docker pull rootproject/root:6.26.06-ubuntu22.04 Run the docker image: docker run -p 9200:9200 --rm -d -it -v ~/host/dir:/container/dir --name TBrowser rootproject/root:6.26.06-ubuntu22.04 root -l --web=server:9200 /opt/root/tutorials/v7/browser.cxx -p 9200:9200 maps the port 9200 of the host to the port 9200 of the container --rm removes the container after it exits -d runs the container in the background -it runs the container in interactive mode -v ~/host/dir:/container/dir mounts the host directory ~/host/dir to the container directory /container/dir --name TBrowser names the container TBrowser rootproject/root:latest is the docker image root -l --web=server:9200 /opt/root/tutorials/v7/browser.</p>
+      </div>
+      <div class="card-footer">
+        <span class="float-left">September 18, 2022</span>
+        <a
+        href="/posts/tbrowser/"
+        class="float-right btn btn-outline-info btn-sm"
+        >Read</a
+        >
+      </div>
+    </div>
+  </a>
+</div>
+
+        
       
         
           <div class="post-card">
@@ -268,7 +336,7 @@ Data Architecture </p>
                   
                 
                 <li class="nav-item">
-                  <a class="smooth-scroll" href="https://jansam123.github.io#about">About</a>
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#about">About</a>
                 </li>
               
               
@@ -277,7 +345,7 @@ Data Architecture </p>
                   
                 
                 <li class="nav-item">
-                  <a class="smooth-scroll" href="https://jansam123.github.io#skills">Skills</a>
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#skills">Skills</a>
                 </li>
               
               
@@ -286,7 +354,7 @@ Data Architecture </p>
                   
                 
                 <li class="nav-item">
-                  <a class="smooth-scroll" href="https://jansam123.github.io#experiences">Experiences</a>
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#experiences">Experiences</a>
                 </li>
               
               
@@ -295,7 +363,7 @@ Data Architecture </p>
                   
                 
                 <li class="nav-item">
-                  <a class="smooth-scroll" href="https://jansam123.github.io#education">Education</a>
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#education">Education</a>
                 </li>
               
               
@@ -304,7 +372,7 @@ Data Architecture </p>
                   
                 
                 <li class="nav-item">
-                  <a class="smooth-scroll" href="https://jansam123.github.io#projects">Projects</a>
+                  <a class="smooth-scroll" href="https://jansam.matfyz.cz#projects">Projects</a>
                 </li>
               
             
