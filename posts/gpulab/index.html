@@ -259,7 +259,7 @@ You can try to run the following code:
 </ol>
 </li>
 </ol>
-<p>If needed, you can follow the official <a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">guide</a> for more details, but remeber to the <code>srun -p gpu-ffa --gpus=1 ch-run -w -u 0 -g 0 -c /home/username ./cuda --</code> prefix and run without sudo.
+<p>If needed, you can follow the official <a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">guide</a> for more details, but remeber to use the prefix <code>srun -p gpu-ffa --gpus=1 ch-run -w -u 0 -g 0 -c /home/username ./cuda --</code> and run without sudo.
 The prefix explains the following:</p>
 <ul>
 <li><code>srun -p gpu-ffa --gpus=1</code> - run on node with GPU</li>
@@ -296,6 +296,21 @@ The prefix explains the following:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>PhysicalDevice<span style="color:#f92672">(</span>name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/physical_device:GPU:0&#39;</span>, device_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;GPU&#39;</span><span style="color:#f92672">)]</span>
 </span></span></code></pre></div></li>
 </ol>
+<h2 id="notes">Notes</h2>
+<p>Include this lines in <code>__init__.py</code> file of tensorflow if you autocompletion and syntax highlighting in your IDE</p>
+<pre><code>```python
+# Explicitly import lazy-loaded modules to support autocompletion.
+# pylint: disable=g-import-not-at-top
+if _typing.TYPE_CHECKING:
+    from tensorflow_estimator.python.estimator.api._v2 import estimator as estimator
+    from keras.api._v2 import keras
+    from keras.api._v2.keras import losses
+    from keras.api._v2.keras import metrics
+    from keras.api._v2.keras import optimizers
+    from keras.api._v2.keras import initializers
+# pylint: enable=g-import-not-at-top
+```
+</code></pre>
 
         </div>
 
@@ -409,6 +424,7 @@ The prefix explains the following:</p>
     <li><a href="#cudnnhttpsdocsnvidiacomdeeplearningcudnninstall-guideindexhtml"><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">cuDNN</a></a></li>
     <li><a href="#python">Python</a></li>
     <li><a href="#tensorflow">Tensorflow</a></li>
+    <li><a href="#notes">Notes</a></li>
   </ul>
 </nav>
       </div>
