@@ -297,6 +297,7 @@ The prefix explains the following:</p>
 </span></span></code></pre></div></li>
 </ol>
 <h2 id="notes">Notes</h2>
+<h3 id="highligting-and-autocompletion-in-ide">Highligting and autocompletion in IDE</h3>
 <p>Include this lines in <code>__init__.py</code> file of tensorflow if you autocompletion and syntax highlighting in your IDE</p>
 <pre><code>```python
 # Explicitly import lazy-loaded modules to support autocompletion.
@@ -311,7 +312,15 @@ if _typing.TYPE_CHECKING:
 # pylint: enable=g-import-not-at-top
 ```
 </code></pre>
-
+<h3 id="error-when-using-cnn-in-tf">Error when using CNN in TF</h3>
+<p>When using CNN in TF you might get the following error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory
+</span></span></code></pre></div><p>To fix this, you need to add the following lines to <code>~/.bashrc</code> (use <code>source ~/.bashrc</code> to apply changes):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    export LD_LIBRARY_PATH<span style="color:#f92672">=</span>/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</span></span><span style="display:flex;"><span>    export LD_LIBRARY_PATH<span style="color:#f92672">=</span>/usr/local/cuda/targets/x86_64-linux/lib/:$LD_LIBRARY_PATH
+</span></span></code></pre></div><p>And create symlink for <code>libcuda.so</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    ln -s /usr/local/cuda/targets/x86_64-linux/lib/libcuda.so.1 /usr/local/cuda/targets/x86_64-linux/lib/libcuda.so
+</span></span></code></pre></div>
         </div>
 
         
@@ -424,7 +433,12 @@ if _typing.TYPE_CHECKING:
     <li><a href="#cudnnhttpsdocsnvidiacomdeeplearningcudnninstall-guideindexhtml"><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">cuDNN</a></a></li>
     <li><a href="#python">Python</a></li>
     <li><a href="#tensorflow">Tensorflow</a></li>
-    <li><a href="#notes">Notes</a></li>
+    <li><a href="#notes">Notes</a>
+      <ul>
+        <li><a href="#highligting-and-autocompletion-in-ide">Highligting and autocompletion in IDE</a></li>
+        <li><a href="#error-when-using-cnn-in-tf">Error when using CNN in TF</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
       </div>
