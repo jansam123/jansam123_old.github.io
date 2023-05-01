@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="sk">
   <head>
-	<meta name="generator" content="Hugo 0.102.3" />
+	<meta name="generator" content="Hugo 0.111.2">
     <title>Samuel Jankovych</title>
     
     
@@ -162,6 +162,10 @@
               
               
             
+            
+              
+              
+            
           
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Viac</a>
@@ -182,6 +186,12 @@
                   
                   
                     
+                    
+                  
+                  
+                    
+                    
+                      <a class="dropdown-item" href="#publications">Publikácie</a>
                     
                   
                   
@@ -419,7 +429,7 @@
       </h5>
       
       <p class="p-1 text-justify">
-        Som začínajúci fyzik s vášnou pre programovanie. Analyzujem dát z detektorov častíc a programujem nátroje na spracovanie dát. Medzi moje zájumi patrí <strong>hlboké učenie</strong> a jeho využitie vo <strong>fyzike vysokých energií</strong> (HEP), <strong>data science</strong> a <strong>softvérové inžinierstvo</strong>. Momentálne pracujem na svojej bakalárskej práci v <a href="https://ipnp.cz">Ústave častíc a jadrových fyziky</a> na Karlovej univerzite  v Prahe.
+        Som začínajúci fyzik s vášnou pre programovanie. Analyzujem dát z detektorov častíc a programujem nátroje na spracovanie dát. Medzi moje zájumi patrí <strong>hlboké učenie</strong> a jeho využitie vo <strong>fyzike vysokých energií</strong> (HEP), <strong>data science</strong> a <strong>softvérové inžinierstvo</strong>. Momentálne pracujem výskume Identifikácii Jetov pomocou Hlbokých Neurónových Sietí (<a href="https://github.com/jansam123/JIDENN">JIDENN</a>).
       </p>
       <div class="text-container ml-auto">
         <ul class="social-link d-flex">
@@ -646,6 +656,29 @@
 </div>
 
       
+        <div class="col-xs-12 col-sm-6 col-lg-4 pt-2">
+  <a class="skill-card-link" >
+    <div class="card">
+      <div class="card-head d-flex">
+        
+          
+          
+          
+            
+          
+        
+          <img class="card-img-xs" src="/images/sections/skills/slurm_hu12cdd5f34766baa63f4f10273d266d9f_86357_24x24_fit_box_3.png" alt="Slurm" />
+          <h5 class="card-title">Slurm</h5>
+        
+      </div>
+      <div class="card-body">
+        <p class="card-text">Skúsenosti s používaním Slurm na využívanie HPC výpočtových zdrojov, ako CPU, tak aj GPU farmy. Skúsenosti so spúšťaním, monitorovaním a managmentom jobov.</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+      
     </div>
   </div>
 </div>
@@ -773,6 +806,10 @@
                                         
                                             
                                                 <li><a href="https://drive.google.com/file/d/1k7So9AuAj62re_s0pZRw0U2cgkDUlR0y/view?usp=sharing" title="Fake tau pozadie v hľadaní excitovaných tau" target="_blank" rel="noopener">Fake tau pozadie v hľadaní excitovaných tau</a></li>
+                                            
+                                        
+                                            
+                                                <li><a href="https://github.com/jansam123/bachelor_thesis" title="Tagovanie jetov pochádzajúcich z kvarkov a gluónov (Bakalárska práca)" target="_blank" rel="noopener">Tagovanie jetov pochádzajúcich z kvarkov a gluónov (Bakalárska práca)</a></li>
                                             
                                         
                                     </ul>
@@ -965,6 +1002,96 @@
   
 
 
+<div class="container-fluid anchor pb-5 publications-section" id="publications">
+  
+    <h1 class="text-center">
+        <span id="publications"></span>Publikácie</h1>
+  
+  <div class="container ml-auto text-center">
+    <div class="btn-group flex-wrap" role="pub-group" id="publication-filter-buttons">
+      
+    </div>
+  </div>
+  <div class="container filtr-publications">
+    <div class="row" id="publication-card-holder">
+      
+        
+
+  
+
+  
+
+
+<div
+  class="col-12 p-2 pub-filtr-item"
+  data-category='pub-all,pub-jet-tagging,pub-bachelor'
+>
+  <div class="card mt-3">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Tagovanie jetov pochádzajúcich z kvarkov a gluónov (Bakalárska práca)</h5>
+      <div class="sub-title">
+        <span><a class="" href="https://mff.cuni.cz">Matematicko-fyzikální fakulta, Univerzita Karlova</a></span>
+        <span class="ml-2">21 Jún 2023</span>
+      </div>
+      <div class="authors">
+        
+          <span class="mr-2"><a class="" href="https://jansam.wieno.sk/sk/">Samuel Jankovych</a></span>
+        
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Pre správne pochopenie fyziky elementárnych častíc a ich interakcií je dôležité poznať, či je jet iniciovaný kvarkom alebo gluonom. Tento problém nie je jednoduchý kvôli podobným vlastnostiam kvarkových a gluonových jetov. V tejto práci ho riešime pomocou moderných techník Hlbokého učenia. Konkrétne využijeme neurónové siete založené na architektúre Transformeru, ktoré sú natrénované na konstituentoch jetu. Predchádzajúce architektúry používané v rôznych tagovacích úlohách vylepšíme a demonštrujeme ich schopnosť presne rozlíšiť medzi kvarkovými a gluonovými jetmi. Predstavíme novú architektúru Dynamically Enhanced Particle Transformer (DeParT) ako kombináciu poznatkov z rôznych aplikačných oblastí Hlbokého učenia, ktorá prekoná výsledky všetkých predchádzajúcich modelov.</p>
+    </div>
+    <div class="card-footer">
+      <div class="tags">
+        
+            <span class="btn badge btn-info ml-1 p-2">
+              ATLAS
+            </span>
+        
+            <span class="btn badge btn-info ml-1 p-2">
+              Jet
+            </span>
+        
+            <span class="btn badge btn-info ml-1 p-2">
+              Neúronová sieť
+            </span>
+        
+            <span class="btn badge btn-info ml-1 p-2">
+              Transformer
+            </span>
+        
+            <span class="btn badge btn-info ml-1 p-2">
+              Hlboké učenie
+            </span>
+        
+      </div>
+      <div class="details-btn">
+        <a class="btn btn-outline-info ml-1 pl-2 mb-2" href="https://github.com/jansam123/bachelor_thesis" target="_blank" rel="noopener" role="button">Detaily</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+    </div>
+  </div>
+</div>
+
+          </div>
+          
+          
+            
+          
+        
+      
+        
+          <div class="container-fluid section-holder d-flex bg-dimmed">
+            
+
+  
+
+
 <div class="container-fluid anchor pb-5 projects-section" id="projects">
   
     <h1 class="text-center">
@@ -1043,6 +1170,68 @@
                 >Detaily</a
               >
             </span>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+        <div
+  class="col-sm-12 col-md-6 col-lg-4 p-2 filtr-item"
+  data-category='all, academic,ATLAS,Transformer,Deep Learning'
+>
+  <div class="card mt-1">
+    <div class="card">
+      <a class="card-header" href="https://github.com/jansam123/JIDENN" target="_blank" rel="noopener">
+        <div>
+          <div class="d-flex">
+            
+            <h5 class="card-title mb-0">Identifikácia jetov pomocou hlbokých neurónových sietí</h5>
+          </div>
+          <div class="sub-title">
+            <span>Autor</span>
+            <span>jún 2022 -</span>
+          </div>
+        </div>
+      </a>
+      <div class="card-body text-justify pt-1 pb-1">
+        <p>Framework na vývoj neurónových sietí pre identifikáciu jetov. Identifikácia jetov je klasifikácia jetov na základe ich pôvodu. Využíva sa na rozlíšenie medzi jetmi iniciovanými kvarkom a gluónom.</p>
+        
+        <div class="project-card-footer">
+          
+            <div class="project-tags-holder">
+              
+                  <span class="badge btn-info">
+                    academic
+                  </span>
+              
+                  <span class="badge btn-info">
+                    ATLAS
+                  </span>
+              
+                  <span class="badge btn-info">
+                    Transformer
+                  </span>
+              
+                  <span class="badge btn-info">
+                    Deep Learning
+                  </span>
+              
+            </div>
+          
+          <div class="project-btn-holder">
+            
+            <a
+              class="github-button-inactive project-btn"
+              href="https://github.com/jansam123/JIDENN"
+              data-icon="octicon-standard"
+              data-show-count="true"
+              aria-label="Star Identifikácia jetov pomocou hlbokých neurónových sietí"
+              >Hviezdička</a
+            >
             
           </div>
         </div>
@@ -1278,6 +1467,15 @@
                 
                 <li class="nav-item">
                   <a class="smooth-scroll" href="https://jansam123.github.io/sk/#education">Vzdelanie</a>
+                </li>
+              
+              
+                
+                
+                  
+                
+                <li class="nav-item">
+                  <a class="smooth-scroll" href="https://jansam123.github.io/sk/#publications">Publikácie</a>
                 </li>
               
               
