@@ -12,7 +12,7 @@
       <pubDate>Sun, 18 Sep 2022 08:06:25 +0600</pubDate>
       
       <guid>https://jansam123.github.io/posts/gpulab/</guid>
-      <description>Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Write to admin (jakub.yaghob@mff.cuni.cz) to get access to docker. Docker to Charliecloud Access docker with salloc -C docker Pull CUDA from docker hub sudo docker pull nvidia/cuda:11.7.1-devel-ubuntu22.04 Now we need to convert the docker image to charliecloud image. You can try to run the following code: ch-convert -i docker nvidia/cuda:11.7.1-devel-ubuntu22.04 cuda If you get an error (in my case it was due to my id being out of range), you need to start a docker container from the image, sudo docker run --rm -d -it --name cuda nvidia/cuda:11.</description>
+      <description>Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Write to admin (jakub.yaghob@mff.cuni.cz) to get access to docker. Charliecloud image Log into a gpu node srun -p gpu-ffa --gpus=1 --time=5:00:00 --pty bash Pull nvidia docker image with Charliecloud ch-image pull nvidia/cuda:12.2-devel-ubuntu22.04 Convert the docker image to charliecloud image expressed as a directory ./my-tf ch-convert -i ch-image -o dir tensorflow/tensorflow:latest-gpu ./my-tf Import CUDA libraries ch-fromhost --nvidia .</description>
     </item>
     
     <item>

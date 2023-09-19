@@ -199,127 +199,102 @@
 <li>Login to gpulab using CAS login, follow this <a href="https://gitlab.mff.cuni.cz/mff/hpc/clusters#installed-software-on-clusters">guide</a>.</li>
 <li>Write to admin (<a href="mailto:jakub.yaghob@mff.cuni.cz">jakub.yaghob@mff.cuni.cz</a>) to get access to docker.</li>
 </ol>
-<h2 id="docker-to-charliecloud">Docker to Charliecloud</h2>
+<h2 id="charliecloud-image">Charliecloud image</h2>
 <ol start="3">
-<li>Access docker with
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>salloc -C docker
+<li>Log into a gpu node
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> --time<span style="color:#f92672">=</span>5:00:00 --pty bash
 </span></span></code></pre></div></li>
-<li>Pull CUDA from docker hub
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker pull nvidia/cuda:11.7.1-devel-ubuntu22.04
+<li>Pull nvidia docker image with Charliecloud
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-image pull nvidia/cuda:12.2-devel-ubuntu22.04
 </span></span></code></pre></div></li>
-<li>Now we need to convert the docker image to charliecloud image.
-You can try to run the following code:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert -i docker nvidia/cuda:11.7.1-devel-ubuntu22.04 cuda
-</span></span></code></pre></div>If you get an error (in my case it was due to my id being out of range), you need to start a docker container from the image,
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker run --rm -d -it --name cuda nvidia/cuda:11.7.1-devel-ubuntu22.04 bash
-</span></span></code></pre></div>then save the container as a tar file.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker export cuda &gt; cuda.tar.gz
-</span></span></code></pre></div>Then you can convert the tar file to a charliecloud image.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert cuda.tar.gz cuda
-</span></span></code></pre></div>Stop the container.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker stop cuda
-</span></span></code></pre></div>You can verify deletion of the container with
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker ps -a
+<li>Convert the docker image to charliecloud image expressed as a directory <code>./my-tf</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert -i ch-image -o dir tensorflow/tensorflow:latest-gpu ./my-tf
 </span></span></code></pre></div></li>
-<li>Convert the image to folder strucutre.
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert cuda ./cuda
+<li>Import CUDA libraries
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-fromhost --nvidia ./my-tf
+</span></span></code></pre></div></li>
+<li>Launch the container
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> ch-run -w -c /home/jankovys --bind<span style="color:#f92672">=</span>/home/jankovys -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> ./my-tf -- bash
 </span></span></code></pre></div></li>
 </ol>
-<h2 id="cuda">CUDA</h2>
-<ol start="7">
-<li>To upload CUDA libraries, first exit the <code>dw[01-05]</code> node
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>username@dw<span style="color:#f92672">[</span>01-05<span style="color:#f92672">]</span>:~$ exit
-</span></span></code></pre></div>then upload the CUDA libs from node with GPU
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-fromhost --nvidia ./cuda
-</span></span></code></pre></div>You can verify the upload with
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run cuda nvidia-smi
-</span></span></code></pre></div>You should see something like this:
-<img src="nvidia_smi.jpg" alt="nvidia-smi"></li>
-</ol>
-<h2 id="cudnnhttpsdocsnvidiacomdeeplearningcudnninstall-guideindexhtml"><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">cuDNN</a></h2>
+<p>The command above will launch the container with working directory <code>/home/jankovys</code> and write access to the container (<code>-w</code>). The <code>--bind=/home/jankovys</code> option will bind the <code>/home/jankovys</code> directory on the host to the <code>/home/jankovys</code> directory in the container. The <code>-u 0 -g 0</code> options will run the container as root user. The <code>--</code> at the end of the command tells ch-run that the command to run in the container follows.</p>
 <ol start="8">
-<li>To use the cuDNN library, you need to register on the <a href="https://developer.nvidia.com/developer-program">NVIDIA Developer Program</a>. Then you can download the cuDNN library from <a href="https://developer.nvidia.com/rdp/cudnn-download">here</a>. Find the version of cuDNN that matches your CUDA version and container OS. If you are using the same container tag, as shown above download <code>Local Installer for Ubuntu22.04 x86_64 (Deb)</code> for <code>CUDA 11.X</code>. Afterwards upload the file to GPULab using <code>scp</code>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>scp cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb username@gpulab:~/
-</span></span></code></pre></div></li>
-<li>Extract the cuDNN library in the Charliecloud image
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- dpkg -i cudnn-local-repo-ubuntu2204-8.5.0.96_1.0-1_amd64.deb
-</span></span></code></pre></div></li>
-<li>Install the cuDNN library:
-<ol>
-<li>import key
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- cp /var/cudnn-local-repo-ubuntu2204-8.5.0.96/cudnn-local-7ED72349-keyring.gpg /usr/share/keyrings/
-</span></span></code></pre></div></li>
-<li>refresh repo metadata
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get update
-</span></span></code></pre></div></li>
-<li>install cuDNN
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get install libcudnn8<span style="color:#f92672">=</span>8.5.0.96-1+cuda11.7
-</span></span></code></pre></div>You might need to press enter to confirm the installation, even if not prompted yet.</li>
-</ol>
-</li>
-</ol>
-<p>If needed, you can follow the official <a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">guide</a> for more details, but remeber to use the prefix <code>srun -p gpu-ffa --gpus=1 ch-run -w -u 0 -g 0 -c /home/username ./cuda --</code> and run without sudo.
-The prefix explains the following:</p>
-<ul>
-<li><code>srun -p gpu-ffa --gpus=1</code> - run on node with GPU</li>
-<li><code>ch-run -w -u 0 -g 0 -c /home/username ./cuda</code> - run as root user (<code>-u 0 -g 0</code>) in the container in <code>./cuda</code> with working directory <code>/home/username</code> and write access to the container (<code>-w</code>).</li>
-<li>after <code>--</code>  the command to run in the container.</li>
-</ul>
-<h2 id="python">Python</h2>
-<ol start="11">
-<li>Install python3.10
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get install python3
-</span></span></code></pre></div>Again you might need to press enter to confirm the installation, even if not prompted yet.</li>
-<li>Install pip
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> -c /home/username ./cuda -- apt-get install python3-pip
-</span></span></code></pre></div>Again you might need to press enter to confirm the installation, even if not prompted yet.</li>
-<li>Verify the installation
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- python3 --version
-</span></span></code></pre></div>You should see something like this:
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Python 3.10.4
+<li>Verify the GPU support
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nvidia-smi
 </span></span></code></pre></div></li>
 </ol>
-<h2 id="tensorflow">Tensorflow</h2>
-<ol start="14">
+<h2 id="condahttpsgretelaibloginstall-tensorflow-with-cuda-cdnn-and-gpu-support-in-4-easy-steps"><a href="https://gretel.ai/blog/install-tensorflow-with-cuda-cdnn-and-gpu-support-in-4-easy-steps">Conda</a></h2>
+<ol start="9">
+<li>Install conda
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wget https://repo.anaconda.com/archive/Anaconda3-2023.07-2-Linux-x86_64.sh
+</span></span><span style="display:flex;"><span>bash Anaconda3-2023.07-2-Linux-x86_64.sh
+</span></span></code></pre></div></li>
+</ol>
+<p>You can verify the installation by running <code>conda --version</code>.
+10. Update conda
+<code>bash conda update conda </code>
+11. Create a new environment
+<code>bash conda create --name tf python=3.10 </code>
+12. Activate the environment
+<code>bash conda activate tf </code>
+You can deactivate the environment by running <code>conda deactivate</code>.</p>
+<h2 id="cuda-librarieshttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">CUDA libraries</a></h2>
+<ol start="13">
+<li>Install CUDA and cuDNN libraries
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda install -c conda-forge cudatoolkit<span style="color:#f92672">=</span>11.8.0
+</span></span><span style="display:flex;"><span>pip install nvidia-cudnn-cu11<span style="color:#f92672">==</span>8.6.0.163
+</span></span></code></pre></div></li>
+<li>Configure system paths
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>CUDNN_PATH<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>dirname <span style="color:#66d9ef">$(</span>python -c <span style="color:#e6db74">&#34;import nvidia.cudnn;print(nvidia.cudnn.__file__)&#34;</span><span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span>export LD_LIBRARY_PATH<span style="color:#f92672">=</span>$CUDNN_PATH/lib:$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH
+</span></span></code></pre></div></li>
+<li>The previous command needs to be run every time you activate the conda environment. To avoid this and run it automatically, run the following commands:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkdir -p $CONDA_PREFIX/etc/conda/activate.d
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;CUDNN_PATH=$(dirname $(python -c &#34;import nvidia.cudnn;print(nvidia.cudnn.__file__)&#34;))&#39;</span> &gt;&gt; $CONDA_PREFIX/etc/conda/activate.d/env_vars.sh
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;export LD_LIBRARY_PATH=$CUDNN_PATH/lib:$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH&#39;</span> &gt;&gt; $CONDA_PREFIX/etc/conda/activate.d/env_vars.sh
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="tensorflowhttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">Tensorflow</a></h2>
+<ol start="16">
+<li>Upgrade pip
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install --upgrade pip
+</span></span></code></pre></div></li>
 <li>Install tensorflow
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- pip3 install tensorflow
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pip install tensorflow
 </span></span></code></pre></div></li>
-<li>Verify the installation
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- python3 -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))&#34;</span>
+<li>Verify the installation and GPU support
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))&#34;</span>
 </span></span></code></pre></div>You should see something like this:
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tf.Tensor<span style="color:#f92672">(</span>0.0, shape<span style="color:#f92672">=()</span>, dtype<span style="color:#f92672">=</span>float32<span style="color:#f92672">)</span>
-</span></span></code></pre></div></li>
-<li>Verify GPU support
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ch-run -w -c /home/username ./cuda -- python3 -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39;))&#34;</span>
+</span></span></code></pre></div>Verify GPU support
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39;))&#34;</span>
 </span></span></code></pre></div>You should see something like this:
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>PhysicalDevice<span style="color:#f92672">(</span>name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/physical_device:GPU:0&#39;</span>, device_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;GPU&#39;</span><span style="color:#f92672">)]</span>
 </span></span></code></pre></div></li>
 </ol>
-<h2 id="notes">Notes</h2>
-<h3 id="syntax-highlighting-and-autocompletion-in-ide">Syntax highlighting and autocompletion in IDE</h3>
-<p>Include this lines in <code>__init__.py</code> file of tensorflow if you autocompletion and syntax highlighting in your IDE</p>
-<pre><code>```python
-# Explicitly import lazy-loaded modules to support autocompletion.
-# pylint: disable=g-import-not-at-top
-if _typing.TYPE_CHECKING:
-    from tensorflow_estimator.python.estimator.api._v2 import estimator as estimator
-    from keras.api._v2 import keras
-    from keras.api._v2.keras import losses
-    from keras.api._v2.keras import metrics
-    from keras.api._v2.keras import optimizers
-    from keras.api._v2.keras import initializers
-# pylint: enable=g-import-not-at-top
-```
-</code></pre>
-<h3 id="error-when-using-cnn-in-tf">Error when using CNN in TF</h3>
-<p>When using CNN in TF you might get the following error:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory
-</span></span></code></pre></div><p>To fix this, you need to add the following lines to <code>~/.bashrc</code> (use <code>source ~/.bashrc</code> to apply changes):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    export LD_LIBRARY_PATH<span style="color:#f92672">=</span>/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-</span></span><span style="display:flex;"><span>    export LD_LIBRARY_PATH<span style="color:#f92672">=</span>/usr/local/cuda/targets/x86_64-linux/lib/:$LD_LIBRARY_PATH
-</span></span></code></pre></div><p>And create symlink for <code>libcuda.so</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    ln -s /usr/local/cuda/targets/x86_64-linux/lib/libcuda.so.1 /usr/local/cuda/targets/x86_64-linux/lib/libcuda.so
-</span></span></code></pre></div>
+<h2 id="running-scripts">Running scripts</h2>
+<p>To run a python script <code>runMe.py</code> create a file <code>runMe.sh</code> with the following content:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#SBATCH --partition=gpu-ffa                                  # partition you want to run job in</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --gpus=1                                             # number of GPUs</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --mem=16G                                            # CPU memory resource</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --time=12:00:00					                     # time limit</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --cpus-per-task=8                                    # cpus per tasks</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --job-name=&#34;run_conda&#34;                               # change to your job name</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#SBATCH --output=/home/jankovys/JIDENN/out/%x.%A.%a.log      # output file    </span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ch-run -w --bind<span style="color:#f92672">=</span>/home/jankovys -c /home/jankovys/JIDENN /home/jankovys/my-tf -- /bin/bash; conda run -n tf python runMe.py
+</span></span></code></pre></div><p>Then run the script using <code>sbatch runMe.sh</code> (this should be run from the head node).
+This script will automatically log onto a working node with selected resources, launch the container, activate the conda environment and run the python script.
+The <code>\bin\bash</code> command is necessary to launch all the conda initialization scripts.</p>
+<p>To run the script in a interactive session, run the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>srun -p gpu-ffa --gpus<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> --time<span style="color:#f92672">=</span>5:00:00 --pty bash
+</span></span><span style="display:flex;"><span>ch-run -w -c /home/jankovys --bind<span style="color:#f92672">=</span>/home/jankovys -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> ./my-tf -- bash
+</span></span><span style="display:flex;"><span>conda activate tf
+</span></span><span style="display:flex;"><span>python runMe.py
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<pre tabindex="0"><code></code></pre>
         </div>
 
         
@@ -427,17 +402,11 @@ if _typing.TYPE_CHECKING:
         <nav id="TableOfContents">
   <ul>
     <li><a href="#prerequisites">Prerequisites</a></li>
-    <li><a href="#docker-to-charliecloud">Docker to Charliecloud</a></li>
-    <li><a href="#cuda">CUDA</a></li>
-    <li><a href="#cudnnhttpsdocsnvidiacomdeeplearningcudnninstall-guideindexhtml"><a href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html">cuDNN</a></a></li>
-    <li><a href="#python">Python</a></li>
-    <li><a href="#tensorflow">Tensorflow</a></li>
-    <li><a href="#notes">Notes</a>
-      <ul>
-        <li><a href="#syntax-highlighting-and-autocompletion-in-ide">Syntax highlighting and autocompletion in IDE</a></li>
-        <li><a href="#error-when-using-cnn-in-tf">Error when using CNN in TF</a></li>
-      </ul>
-    </li>
+    <li><a href="#charliecloud-image">Charliecloud image</a></li>
+    <li><a href="#condahttpsgretelaibloginstall-tensorflow-with-cuda-cdnn-and-gpu-support-in-4-easy-steps"><a href="https://gretel.ai/blog/install-tensorflow-with-cuda-cdnn-and-gpu-support-in-4-easy-steps">Conda</a></a></li>
+    <li><a href="#cuda-librarieshttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">CUDA libraries</a></a></li>
+    <li><a href="#tensorflowhttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">Tensorflow</a></a></li>
+    <li><a href="#running-scripts">Running scripts</a></li>
   </ul>
 </nav>
       </div>
