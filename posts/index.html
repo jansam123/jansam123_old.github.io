@@ -183,7 +183,7 @@
       </div>
       <div class="card-body">
         <h5 class="card-title">Setup MFF UK GPULab</h5>
-        <p class="card-text post-summary">Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Write to admin (jakub.yaghob@mff.cuni.cz) to get access to docker. Charliecloud image Log into a gpu node srun -p gpu-ffa --gpus=1 --time=5:00:00 --pty bash Pull nvidia docker image with Charliecloud ch-image pull nvidia/cuda:12.2-devel-ubuntu22.04 Convert the docker image to charliecloud image expressed as a directory ./my-tf ch-convert -i ch-image -o dir nvidia/cuda:12.2-devel-ubuntu22.04 ./my-tf Import CUDA libraries ch-fromhost --nvidia .</p>
+        <p class="card-text post-summary">Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Charliecloud image Log into a gpu node srun -p gpu-ffa --gpus=1 --time=5:00:00 --pty bash Pull nvidia docker image with Charliecloud ch-image pull nvidia/cuda:12.2-devel-ubuntu22.04 Convert the docker image to charliecloud image expressed as a directory ./my-tf ch-convert -i ch-image -o dir nvidia/cuda:12.2-devel-ubuntu22.04 ./my-tf Import CUDA libraries ch-fromhost --nvidia ./my-tf Launch the container ch-run -w -c /home/jankovys --bind=/home/jankovys -u 0 -g 0 .</p>
       </div>
       <div class="card-footer">
         <span class="float-left">September 18, 2022</span>
