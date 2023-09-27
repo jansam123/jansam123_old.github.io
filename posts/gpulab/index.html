@@ -208,7 +208,7 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-image pull nvidia/cuda:12.2-devel-ubuntu22.04
 </span></span></code></pre></div></li>
 <li>Convert the docker image to charliecloud image expressed as a directory <code>./my-tf</code>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert -i ch-image -o dir tensorflow/tensorflow:latest-gpu ./my-tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-convert -i ch-image -o dir nvidia/cuda:12.2-devel-ubuntu22.04 ./my-tf
 </span></span></code></pre></div></li>
 <li>Import CUDA libraries
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ch-fromhost --nvidia ./my-tf
@@ -226,18 +226,24 @@
 <h2 id="condahttpsgretelaibloginstall-tensorflow-with-cuda-cdnn-and-gpu-support-in-4-easy-steps"><a href="https://gretel.ai/blog/install-tensorflow-with-cuda-cdnn-and-gpu-support-in-4-easy-steps">Conda</a></h2>
 <ol start="9">
 <li>Install conda
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wget https://repo.anaconda.com/archive/Anaconda3-2023.07-2-Linux-x86_64.sh
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt-get install wget
+</span></span><span style="display:flex;"><span>wget https://repo.anaconda.com/archive/Anaconda3-2023.07-2-Linux-x86_64.sh
 </span></span><span style="display:flex;"><span>bash Anaconda3-2023.07-2-Linux-x86_64.sh
 </span></span></code></pre></div></li>
 </ol>
-<p>You can verify the installation by running <code>conda --version</code>.
-10. Update conda
-<code>bash conda update conda </code>
-11. Create a new environment
-<code>bash conda create --name tf python=3.10 </code>
-12. Activate the environment
-<code>bash conda activate tf </code>
-You can deactivate the environment by running <code>conda deactivate</code>.</p>
+<p>You can verify the installation by running <code>conda --version</code>.</p>
+<ol start="10">
+<li>Update conda
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda update conda
+</span></span></code></pre></div></li>
+<li>Create a new environment
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda create --name tf python<span style="color:#f92672">=</span>3.10
+</span></span></code></pre></div></li>
+<li>Activate the environment
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>conda activate tf
+</span></span></code></pre></div></li>
+</ol>
+<p>You can deactivate the environment by running <code>conda deactivate</code>.</p>
 <h2 id="cuda-librarieshttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">CUDA libraries</a></h2>
 <ol start="13">
 <li>Install CUDA and cuDNN libraries
