@@ -38,6 +38,29 @@
     
     
     <item>
+      <title></title>
+      <link>https://jansam123.github.io/posts/arch_linux/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jansam123.github.io/posts/arch_linux/</guid>
+      <description>Arch Linux Installation Download the ISO image Download the latest Arch Linux ISO from here.
+Create empty disk image Create the empty file with filled zeros of size 64GB:
+dd if=/dev/zero of=bios.img bs=2G count=32 Boot the ISO image Make sure to have the OVMF package installed:
+pacman -S ovmf This package contains the UEFI firmware for QEMU. Copy the UEFI firmware to the current directory:
+cp /usr/share/edk2/x64/OVMF_VARS.fd . Boot the ISO image with QEMU:</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://jansam123.github.io/posts/tips_and_tricks/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jansam123.github.io/posts/tips_and_tricks/</guid>
+      <description>Tips and Tricks Git+latexdiff Generate a latexdiff between two commits
+git latexdiff 0db4b84289f7554810cfdaacf7bafdbab23466b2 -- --main ANA-JETM-2023-07-PUB.tex </description>
+    </item>
+    
+    <item>
       <title>Jet Identification Deep Neural Network</title>
       <link>https://jansam123.github.io/posts/jidenn/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
