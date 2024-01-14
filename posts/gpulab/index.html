@@ -297,6 +297,12 @@ The <code>\bin\bash</code> command is necessary to launch all the conda initiali
 </span></span><span style="display:flex;"><span>ch-run -w -c /home/jankovys --bind<span style="color:#f92672">=</span>/home/jankovys -u <span style="color:#ae81ff">0</span> -g <span style="color:#ae81ff">0</span> ./my-tf -- bash
 </span></span><span style="display:flex;"><span>conda activate tf
 </span></span><span style="display:flex;"><span>python runMe.py
+</span></span></code></pre></div><h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="could-not-load-library-libcudnn_cnn_inferso8-error-libcudaso-cannot-open-shared-object-file-no-such-file-or-directory-error"><code>Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory</code> error</h3>
+<p>When using CNN in TF you might get the following error:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory
+</span></span></code></pre></div><p>To fix this create a link inside your charliecloud image:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    ln -s /usr/local/cuda/targets/x86_64-linux/lib/libcuda.so.1 /usr/local/cuda/targets/x86_64-linux/lib/libcuda.so
 </span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <pre tabindex="0"><code></code></pre>
@@ -412,6 +418,11 @@ The <code>\bin\bash</code> command is necessary to launch all the conda initiali
     <li><a href="#cuda-librarieshttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">CUDA libraries</a></a></li>
     <li><a href="#tensorflowhttpswwwtensorfloworginstallpip"><a href="https://www.tensorflow.org/install/pip">Tensorflow</a></a></li>
     <li><a href="#running-scripts">Running scripts</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a>
+      <ul>
+        <li><a href="#could-not-load-library-libcudnn_cnn_inferso8-error-libcudaso-cannot-open-shared-object-file-no-such-file-or-directory-error"><code>Could not load library libcudnn_cnn_infer.so.8. Error: libcuda.so: cannot open shared object file: No such file or directory</code> error</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
       </div>

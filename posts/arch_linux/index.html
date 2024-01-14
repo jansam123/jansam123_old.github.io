@@ -241,7 +241,7 @@ Copy the UEFI firmware to the current directory:</p>
 <p>Check with <code>lsblk</code> that the partitions were created correctly.
 Create a filesystem on the partitions:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mkfs.fat -F32 /dev/sda1
-</span></span><span style="display:flex;"><span>mkfs.btfs /dev/sda2
+</span></span><span style="display:flex;"><span>mkfs.btrfs /dev/sda2
 </span></span></code></pre></div><p>You can check the filesystems with <code>lsblk -f</code>.
 Mount the filesystems:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mount /dev/sda2 /mnt
@@ -268,6 +268,9 @@ Mount the filesystems:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;arch&#34;</span> &gt; /etc/hostname
 </span></span></code></pre></div><p>Set the root password:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>passwd
+</span></span></code></pre></div><h3 id="time-synchronization">Time synchronization</h3>
+<p>Use the <code>timedatectl</code> command to ensure the system clock is accurate:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>timedatectl set-ntp true
 </span></span></code></pre></div><h2 id="bootloaderhttpswikiarchlinuxorgtitlegrub"><a href="https://wiki.archlinux.org/title/GRUB">Bootloader</a></h2>
 <p>Install the <code>grub</code> bootloader:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S grub efibootmgr
@@ -287,6 +290,293 @@ Mount the filesystems:</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -cpu host <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -smp <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    -vnc :4232
+</span></span></code></pre></div><h1 id="network-setup">Network Setup</h1>
+<p>In the further we assume that we have a machine <code>a</code> which has htwo VMs running <code>ns1</code> and <code>gw</code> and we want to connect them to the internet, such that <code>ns1</code> can access the internet through <code>gw</code>.</p>
+<h2 id="vde-switch">VDE Switch</h2>
+<p>Create a <code>vde_switch</code> network:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/usr/bin/vde_switch -sock /home/jankovys/vde/sw1/comm -daemon
+</span></span></code></pre></div><p>Or create a service that will start the <code>vde_switch</code> automatically. Create a file <code>/etc/systemd/system/sw1.service</code> or <code>~/.config/systemd/user/sw1.service</code> with the following content:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Unit]
+Description=Vde Switch
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/vde_switch -sock /home/jankovys/vde/sw1/comm -daemon
+Type=forking
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=default.target
+</code></pre><p>Then enable and start the service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl --user enable --now sw1.service
+</span></span></code></pre></div><h2 id="vms-setup">VMs setup</h2>
+<h3 id="ns1"><code>ns1</code></h3>
+<p>Connect the VM to the <code>vde_switch</code> network with option</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>-nic vde,mac<span style="color:#f92672">=</span>de:ad:be:ef:20:03,sock<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/vde/sw1/comm&#34;</span>
+</span></span></code></pre></div><p>Create a network interface on the <code>ns1</code> by creating a file <code>/etc/systemd/network/ens3.network</code> with the following content:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Match]
+Name=ens3
+
+[Network]
+Address=10.0.42.2/24
+Gateway=10.0.42.1
+DNS=8.8.8.8
+</code></pre><p>Then enable and start the service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable --now systemd-networkd
+</span></span></code></pre></div><p>You can check the network configuration with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ip addr show
+</span></span><span style="display:flex;"><span>ip route show
+</span></span></code></pre></div><p>Add a nameserver to <code>/etc/resolv.conf</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;nameserver 8.8.8.8&#34;</span> &gt; /etc/resolv.conf
+</span></span></code></pre></div><h3 id="gw"><code>gw</code></h3>
+<p>Connect the VM to the <code>vde_switch</code> network and external network with options</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>-nic vde,mac<span style="color:#f92672">=</span>de:ad:be:ef:20:01,sock<span style="color:#f92672">=</span>/var/run/vde/backbone/comm <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-nic vde,mac<span style="color:#f92672">=</span>de:ad:be:ef:20:02,sock<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/vde/sw1/comm&#34;</span> <span style="color:#ae81ff">\
+</span></span></span></code></pre></div><p>Create a <code>ens3</code> network interface connecetd to the external internet on the <code>gw</code> by creating a file <code>/etc/systemd/network/ens3.network</code> with the following content:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Match]
+Name=ens3
+
+[Network]
+Address=10.0.0.42/24
+Gateway=10.0.0.1
+DNS=10.0.0.1
+</code></pre><p>Additionaly create a <code>ens4</code> network interface connected to the <code>vde_switch</code> network by creating a file <code>/etc/systemd/network/ens4.network</code> with the following content:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Match]
+Name=ens4
+
+[Network]
+Address=10.0.42.1/24
+</code></pre><p>Then enable and start the service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable --now systemd-networkd
+</span></span></code></pre></div><p>Add a nameserver to <code>/etc/resolv.conf</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;nameserver 8.8.8.8&#34;</span> &gt; /etc/resolv.conf
+</span></span></code></pre></div><h3 id="setp-up-masquerading">Setp up masquerading</h3>
+<p>Add the <code>IPMasquerade=yes</code> line to <code>/etc/systemd/network/ens4.network</code> and <code>/etc/systemd/network/ens5.network</code> on the <code>gw</code> to enable fowarding and masquerading of the traffic from <code>ens4</code> and <code>ens5</code> to the Internet:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Match]
+Name=ens4
+
+[Network]
+Address=10.0.42.1/24
+IPMasquerade=yes
+</code></pre><pre tabindex="0"><code class="language-conf" data-lang="conf">[Match]
+Name=ens5
+
+[Network]
+Address=10.0.142.1/24
+IPMasquerade=yes
+</code></pre><p>Then restart the <code>systemd-networkd</code> service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl restart systemd-networkd
+</span></span></code></pre></div><h1 id="vm-base-setup">VM base setup</h1>
+<p>Create users:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>useradd -m jankovys
+</span></span><span style="display:flex;"><span>useradd -m eval
+</span></span></code></pre></div><p>Change the password for the users:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>passwd jankovys
+</span></span><span style="display:flex;"><span>passwd eval
+</span></span></code></pre></div><p>Install the <code>sudo</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S sudo
+</span></span></code></pre></div><p>Add the users to be able to use <code>sudo</code> without password by editing the <code>/etc/sudoers</code> file</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S vi
+</span></span><span style="display:flex;"><span>visudo
+</span></span></code></pre></div><p>and adding the following lines:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">## User privilege specification
+jankovys ALL=(ALL) ALL
+eval ALL=(ALL) ALL
+##
+Defaults:jankovys !authenticate
+Defaults:evel !authenticate
+</code></pre><p>Install the <code>openssh</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S openssh
+</span></span></code></pre></div><p>Enable the <code>sshd</code> service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable --now sshd
+</span></span></code></pre></div><p>Add the puclib key to the <code>.ssh/authorized_keys</code> file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ssh-ed25519 .....
+</span></span></code></pre></div><p>Disable passwrd authentication by editing the <code>/etc/ssh/sshd_config</code> file and setting the following options:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">PasswordAuthentication no
+# ChallengeResponseAuthentication no
+</code></pre><p>Restart the <code>sshd</code> service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl restart sshd
+</span></span></code></pre></div><h1 id="snapper-setup">Snapper setup</h1>
+<h2 id="setp-up-cronie">Setp up <code>cronie</code></h2>
+<p>Install <code>cronie</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S cronie
+</span></span></code></pre></div><p>Enable and start the <code>cronie</code> service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable --now cronie
+</span></span></code></pre></div><p>The <code>cron</code> jobs can be edited by</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>crontab -e
+</span></span></code></pre></div><p>and the list of the jobs can be displayed by</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>crontab -l 
+</span></span></code></pre></div><h2 id="setup-snapper">Setup <code>snapper</code></h2>
+<p>Snapper is a tool for creating snapshots of the filesystem.
+Install the <code>snapper</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S snapper
+</span></span></code></pre></div><p>Generate the default configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>snapper -c root create-config /
+</span></span></code></pre></div><p>This will create a configuration file <code>/etc/snapper/configs/root</code>, which you can edit to your needs.</p>
+<!-- raw HTML omitted -->
+<pre tabindex="0"><code class="language-conf" data-lang="conf"># subvolume to snapshot
+SUBVOLUME=&#34;/&#34;
+
+# filesystem type
+FSTYPE=&#34;btrfs&#34;
+
+
+# btrfs qgroup for space aware cleanup algorithms
+QGROUP=&#34;&#34;
+
+
+# fraction or absolute size of the filesystems space the snapshots may use
+SPACE_LIMIT=&#34;0.5&#34;
+
+# fraction or absolute size of the filesystems space that should be free
+FREE_LIMIT=&#34;0.2&#34;
+
+
+# users and groups allowed to work with config
+ALLOW_USERS=&#34;&#34;
+ALLOW_GROUPS=&#34;&#34;
+
+# sync users and groups from ALLOW_USERS and ALLOW_GROUPS to .snapshots
+# directory
+SYNC_ACL=&#34;no&#34;
+
+
+# start comparing pre- and post-snapshot in background after creating
+# post-snapshot
+BACKGROUND_COMPARISON=&#34;yes&#34;
+
+
+# run daily number cleanup
+NUMBER_CLEANUP=&#34;yes&#34;
+
+# limit for number cleanup
+NUMBER_MIN_AGE=&#34;1800&#34;
+NUMBER_LIMIT=&#34;30&#34;
+NUMBER_LIMIT_IMPORTANT=&#34;30&#34;
+
+# create hourly snapshots
+TIMELINE_CREATE=&#34;yes&#34;
+
+# cleanup hourly snapshots after some time
+TIMELINE_CLEANUP=&#34;yes&#34;
+
+# limits for timeline cleanup
+TIMELINE_MIN_AGE=&#34;1800&#34;
+TIMELINE_LIMIT_HOURLY=&#34;20&#34;
+TIMELINE_LIMIT_DAILY=&#34;20&#34;
+TIMELINE_LIMIT_WEEKLY=&#34;1&#34;
+TIMELINE_LIMIT_MONTHLY=&#34;0&#34;
+TIMELINE_LIMIT_YEARLY=&#34;0&#34;
+
+
+# cleanup empty pre-post-pairs
+EMPTY_PRE_POST_CLEANUP=&#34;yes&#34;
+
+# limits for empty pre-post-pair cleanup
+EMPTY_PRE_POST_MIN_AGE=&#34;1800&#34;
+</code></pre><!-- raw HTML omitted -->
+<h1 id="firewall-setup">Firewall setup</h1>
+<p>Install <code>nftables</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S nftables
+</span></span></code></pre></div><p>Edit the <code>/etc/nftables.conf</code> file to your needs:</p>
+<ol>
+<li>Drop input and forward hooks</li>
+<li>Allow all outbound and forwarded traffic</li>
+<li>Allow established and related traffic</li>
+<li>Allow SSH traffic</li>
+<li>Allow ICMP traffic</li>
+<li>Allow localhost (loopback) traffic</li>
+</ol>
+<!-- raw HTML omitted -->
+<pre tabindex="0"><code>#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet filter {
+	chain input {
+		type filter hook input priority filter; policy drop;
+		ct state invalid drop comment &#34;early drop of invalid connections&#34;
+		ct state { established, related } accept comment &#34;allow tracked connections&#34;
+		iifname &#34;lo&#34; accept comment &#34;allow from loopback&#34;
+		ip protocol icmp accept comment &#34;allow icmp&#34;
+		meta l4proto ipv6-icmp accept comment &#34;allow icmp v6&#34;
+		tcp dport 22 accept comment &#34;allow sshd&#34;
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		ct state { established, related } accept
+	}
+}
+</code></pre><!-- raw HTML omitted -->
+<p>Load the configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nft -f /etc/nftables.conf
+</span></span></code></pre></div><p>The configuration can be tested with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nft list ruleset
+</span></span></code></pre></div><p>Enable and start the <code>nftables</code> service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable --now nftables
+</span></span></code></pre></div><h1 id="bird">BIRD</h1>
+<p>Install the <code>bird</code> package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -S bird
+</span></span></code></pre></div><p>Edit the <code>/etc/bird.conf</code> file to your needs to configure the BGP protocol:</p>
+<ol>
+<li>Set the router ID</li>
+<li>Enable the <code>device</code> protocol</li>
+<li>Import and expoart all routes from the <code>direct</code> protocol and <code>kernel</code> protocol</li>
+<li>Setup the <code>BGP</code> protocol</li>
+</ol>
+<!-- raw HTML omitted -->
+<pre tabindex="0"><code class="language-conf" data-lang="conf">
+log syslog all;
+router id 10.0.0.42;
+protocol device {
+}
+
+protocol direct {
+	ipv4;			# Connect to default IPv4 table
+	ipv6;			# ... and to default IPv6 table
+}
+
+protocol kernel {
+	ipv4 {			
+
+	      import all;	# Import to table, default is import all
+	      export all;	# Export to protocol. default is export none
+	};
+
+}
+
+# Another instance for IPv6, skipping default options
+protocol kernel {
+	ipv6 { export all; };
+}
+
+protocol static {
+	ipv4;			# Again, IPv4 channel with default options
+
+
+}
+protocol bgp {
+
+  local 10.0.0.42 as 65042; # Local AS number
+  neighbor 10.0.0.1 as 65001; # Remote AS number 
+  multihop; # Allow multihop connections
+  ipv4 {
+    export all; # Export all routes to the neighbor
+    import all; # Import all routes from the neighbor
+    next hop self; # Use local address as nexthop for all routes
+  };
+};
+</code></pre><!-- raw HTML omitted -->
+<p>Enable and start the <code>bird</code> service:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl enable --now bird
+</span></span></code></pre></div><p>The routing table can be displayed with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>birdc show route
+</span></span></code></pre></div><p>Or more verbosely with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>birdc show route all
+</span></span></code></pre></div><p>To view all protocols use:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo birdc show protocols
 </span></span></code></pre></div>
         </div>
 
@@ -379,9 +669,29 @@ Mount the filesystems:</p>
     <li><a href="#prepare-the-disk">Prepare the disk</a></li>
     <li><a href="#install-the-base-system">Install the base system</a></li>
     <li><a href="#change-root-to-the-newly-installed-system">Change root to the newly installed system</a></li>
-    <li><a href="#time-zone-localization-hostname-and-root-password-optional">Time zone, localization, hostname and root password (optional)</a></li>
+    <li><a href="#time-zone-localization-hostname-and-root-password-optional">Time zone, localization, hostname and root password (optional)</a>
+      <ul>
+        <li><a href="#time-synchronization">Time synchronization</a></li>
+      </ul>
+    </li>
     <li><a href="#bootloaderhttpswikiarchlinuxorgtitlegrub"><a href="https://wiki.archlinux.org/title/GRUB">Bootloader</a></a></li>
     <li><a href="#start-the-new-system">Start the new system</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#vde-switch">VDE Switch</a></li>
+    <li><a href="#vms-setup">VMs setup</a>
+      <ul>
+        <li><a href="#ns1"><code>ns1</code></a></li>
+        <li><a href="#gw"><code>gw</code></a></li>
+        <li><a href="#setp-up-masquerading">Setp up masquerading</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#setp-up-cronie">Setp up <code>cronie</code></a></li>
+    <li><a href="#setup-snapper">Setup <code>snapper</code></a></li>
   </ul>
 </nav>
       </div>
