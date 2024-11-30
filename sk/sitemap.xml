@@ -2,40 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://jansam123.github.io/sk/categories/</loc>
+    <loc>https://samueljankovych.com/sk/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://jansam123.github.io/categories/"
+                href="https://samueljankovych.com/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="sk"
-                href="https://jansam123.github.io/sk/categories/"
+                href="https://samueljankovych.com/sk/categories/"
                 />
   </url><url>
-    <loc>https://jansam123.github.io/sk/</loc>
+    <loc>https://samueljankovych.com/sk/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://jansam123.github.io/"
+                href="https://samueljankovych.com/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="sk"
-                href="https://jansam123.github.io/sk/"
+                href="https://samueljankovych.com/sk/"
                 />
   </url><url>
-    <loc>https://jansam123.github.io/sk/tags/</loc>
+    <loc>https://samueljankovych.com/sk/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://jansam123.github.io/tags/"
+                href="https://samueljankovych.com/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="sk"
-                href="https://jansam123.github.io/sk/tags/"
+                href="https://samueljankovych.com/sk/tags/"
                 />
   </url>
 </urlset>

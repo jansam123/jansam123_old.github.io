@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Samuel Jankovych</title>
-    <link>https://jansam123.github.io/posts/</link>
+    <link>https://samueljankovych.com/posts/</link>
     <description>Recent content in Posts on Samuel Jankovych</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Sep 2022 08:06:25 +0600</lastBuildDate><atom:link href="https://jansam123.github.io/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+    <lastBuildDate>Sun, 18 Sep 2022 08:06:25 +0600</lastBuildDate><atom:link href="https://samueljankovych.com/posts/index.xml" rel="self" type="application/rss+xml" /><item>
       <title>Setup MFF UK GPULab</title>
-      <link>https://jansam123.github.io/posts/gpulab/</link>
+      <link>https://samueljankovych.com/posts/gpulab/</link>
       <pubDate>Sun, 18 Sep 2022 08:06:25 +0600</pubDate>
       
-      <guid>https://jansam123.github.io/posts/gpulab/</guid>
+      <guid>https://samueljankovych.com/posts/gpulab/</guid>
       <description>Prerequisites Get a CAS login. Login to gpulab using CAS login, follow this guide. Charliecloud image Log into a gpu node srun -p gpu-ffa --gpus=1 --time=5:00:00 --pty bash Pull nvidia docker image with Charliecloud ch-image pull tensorflow/tensorflow:latest-gpu Convert the docker image to charliecloud image expressed as a directory ./my-tf ch-convert -i ch-image -o dir tensorflow/tensorflow:latest-gpu ./my-tf Import CUDA libraries ch-fromhost --nvidia ./my-tf Launch the container ch-run -w -c /home/jankovys --bind=/home/jankovys -u 0 -g 0 .</description>
     </item>
     
     <item>
       <title>TBrowser in docker container</title>
-      <link>https://jansam123.github.io/posts/tbrowser/</link>
+      <link>https://samueljankovych.com/posts/tbrowser/</link>
       <pubDate>Sun, 18 Sep 2022 08:06:25 +0600</pubDate>
       
-      <guid>https://jansam123.github.io/posts/tbrowser/</guid>
+      <guid>https://samueljankovych.com/posts/tbrowser/</guid>
       <description>Set up Install Docker Pull the ROOT (rootproject/root:6.26.06-ubuntu22.04) docker image: docker pull rootproject/root:6.26.06-ubuntu22.04 Run the docker image: docker run -p 9200:9200 --rm -d -it -v ~/host/dir:/container/dir --name TBrowser rootproject/root:6.26.06-ubuntu22.04 root -l --web=server:9200 /opt/root/tutorials/v7/browser.cxx -p 9200:9200 maps the port 9200 of the host to the port 9200 of the container --rm removes the container after it exits -d runs the container in the background -it runs the container in interactive mode -v ~/host/dir:/container/dir mounts the host directory ~/host/dir to the container directory /container/dir --name TBrowser names the container TBrowser rootproject/root:latest is the docker image root -l --web=server:9200 /opt/root/tutorials/v7/browser.</description>
     </item>
     
@@ -39,10 +39,10 @@
     
     <item>
       <title></title>
-      <link>https://jansam123.github.io/posts/arch_linux/</link>
+      <link>https://samueljankovych.com/posts/arch_linux/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://jansam123.github.io/posts/arch_linux/</guid>
+      <guid>https://samueljankovych.com/posts/arch_linux/</guid>
       <description>Arch Linux Installation Download the ISO image Download the latest Arch Linux ISO from here.
 Create empty disk image Create the empty file with filled zeros of size 64GB:
 dd if=/dev/zero of=bios.img bs=2G count=32 Boot the ISO image Make sure to have the OVMF package installed:
@@ -52,20 +52,20 @@ cp /usr/share/edk2/x64/OVMF_VARS.fd . Boot the ISO image with QEMU:</description
     
     <item>
       <title></title>
-      <link>https://jansam123.github.io/posts/tips_and_tricks/</link>
+      <link>https://samueljankovych.com/posts/tips_and_tricks/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://jansam123.github.io/posts/tips_and_tricks/</guid>
+      <guid>https://samueljankovych.com/posts/tips_and_tricks/</guid>
       <description>Tips and Tricks Git+latexdiff Generate a latexdiff between two commits
 git latexdiff 0db4b84289f7554810cfdaacf7bafdbab23466b2 -- --main ANA-JETM-2023-07-PUB.tex </description>
     </item>
     
     <item>
       <title>Jet Identification Deep Neural Network</title>
-      <link>https://jansam123.github.io/posts/jidenn/</link>
+      <link>https://samueljankovych.com/posts/jidenn/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://jansam123.github.io/posts/jidenn/</guid>
+      <guid>https://samueljankovych.com/posts/jidenn/</guid>
       <description>Introduction This is a deep neural network for jet identification.
 Data Architecture </description>
     </item>
