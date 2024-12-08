@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Samuel Jankovych</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Sep 2022 08:06:25 +0600</lastBuildDate><atom:link href="https://samueljankovych.com/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+    <lastBuildDate>Sun, 08 Dec 2024 08:06:25 +0600</lastBuildDate><atom:link href="https://samueljankovych.com/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+      <title>Programovanie pre fyzikov</title>
+      <link>https://samueljankovych.com/posts/prog_fyz/</link>
+      <pubDate>Sun, 08 Dec 2024 08:06:25 +0600</pubDate>
+      
+      <guid>https://samueljankovych.com/posts/prog_fyz/</guid>
+      <description>Prezentácia Prezentácia a príklady v Jupyter notebooku: prop_chyb.ipynb Príklady Príklady od Vojtecha k propagácii chýb: uncertainty_propagation_examples.py Skript z minulého cvičenia (iba na import plot funkcie): fits_examples.py Odporúčané predmety Základy programovania Použití počítačů ve fyzice NOFY084 - praktické fyzikálne príkady, vhodné na zlepšenie rutiny programovania (v Pythone), KZ za úlohy Programování a zpracování dat v Pythonu NOFY178 - vyššia úroveň programovania v Pythone (triedy, dekorátory,&amp;hellip;), vhodné na zlepšenie dizajnu kódu, KZ za úlohy Strojové učenie (AI) Strojové učení v částicové fyzice NJSF164 - základy hlbokého učenia formou príkladov, vhodné aj pre začiatočnikov strojového učenia, moderné techniky AI, vhodné pre všetkých (nielen časticová fyzika), Zk za úkoly Úvod do strojového učení v Pythonu NPFL129 - strojové učenie, príklady+teória, náročejšie, témy do hĺbky, nie moderné techniky AI (skorej klasické), Zk písomná, Z za úlohy, viac info Hluboké učení NPFL138 - hlboké učenie, príklady+teória, náročné, témy do hĺbky, najmodernejšie techniky AI, Z za úlohy, Zk písomná alebo v prípade splnenia všetkých úloh rovno za 1, viac info </description>
+    </item>
+    
+    <item>
       <title>Setup MFF UK GPULab</title>
       <link>https://samueljankovych.com/posts/gpulab/</link>
       <pubDate>Sun, 18 Sep 2022 08:06:25 +0600</pubDate>
@@ -22,6 +31,16 @@
       
       <guid>https://samueljankovych.com/posts/tbrowser/</guid>
       <description>Set up Install Docker Pull the ROOT (rootproject/root:6.26.06-ubuntu22.04) docker image: docker pull rootproject/root:6.26.06-ubuntu22.04 Run the docker image: docker run -p 9200:9200 --rm -d -it -v ~/host/dir:/container/dir --name TBrowser rootproject/root:6.26.06-ubuntu22.04 root -l --web=server:9200 /opt/root/tutorials/v7/browser.cxx -p 9200:9200 maps the port 9200 of the host to the port 9200 of the container --rm removes the container after it exits -d runs the container in the background -it runs the container in interactive mode -v ~/host/dir:/container/dir mounts the host directory ~/host/dir to the container directory /container/dir --name TBrowser names the container TBrowser rootproject/root:latest is the docker image root -l --web=server:9200 /opt/root/tutorials/v7/browser.</description>
+    </item>
+    
+    <item>
+      <title>Jet Identification Deep Neural Network</title>
+      <link>https://samueljankovych.com/posts/jidenn/</link>
+      <pubDate>Fri, 16 Sep 2022 08:06:25 +0600</pubDate>
+      
+      <guid>https://samueljankovych.com/posts/jidenn/</guid>
+      <description>Introduction This is a deep neural network for jet identification.
+Data Architecture </description>
     </item>
     
     
@@ -58,16 +77,6 @@ cp /usr/share/edk2/x64/OVMF_VARS.fd . Boot the ISO image with QEMU:</description
       <guid>https://samueljankovych.com/posts/tips_and_tricks/</guid>
       <description>Tips and Tricks Git+latexdiff Generate a latexdiff between two commits
 git latexdiff 0db4b84289f7554810cfdaacf7bafdbab23466b2 -- --main ANA-JETM-2023-07-PUB.tex </description>
-    </item>
-    
-    <item>
-      <title>Jet Identification Deep Neural Network</title>
-      <link>https://samueljankovych.com/posts/jidenn/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://samueljankovych.com/posts/jidenn/</guid>
-      <description>Introduction This is a deep neural network for jet identification.
-Data Architecture </description>
     </item>
     
     
